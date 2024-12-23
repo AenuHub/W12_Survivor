@@ -31,13 +31,23 @@ public class CompetitorsController : Controller
     }
     
     [HttpGet("Categories/{categoryId:int:min(1)}")]
-    public IActionResult GetByCategoryId(int categoryId)
+    public ActionResult<IEnumerable<Competitor>> GetByCategoryId(int categoryId)
     {
         var category = _context.Categories.Find(categoryId);
         if (category is null)
             return NotFound();
         
-        var competitors = _context.Competitors.Where(c => c.CategoryId == categoryId);
+        var competitors = _context.Competitors.Where(c => c.CategoryId == categoryId)
+                                                            .Select(c => new Competitor
+                                                            {
+                                                                Id = c.Id, 
+                                                                FirstName = c.FirstName, 
+                                                                LastName = c.LastName,
+                                                                CategoryId = c.CategoryId,
+                                                                CreatedDate = c.CreatedDate,
+                                                                ModifiedDate = c.ModifiedDate,
+                                                                IsDeleted = c.IsDeleted
+                                                            }).ToList();
         return Ok(competitors);
     }
 
