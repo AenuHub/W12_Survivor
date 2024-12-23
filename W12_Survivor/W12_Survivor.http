@@ -1,0 +1,6 @@
+@W12_Survivor_HostAddress = http://localhost:5183
+
+GET {{W12_Survivor_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
